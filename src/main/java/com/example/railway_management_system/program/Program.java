@@ -1,7 +1,7 @@
 package com.example.railway_management_system.program;
 
 import com.example.railway_management_system.ruta.Ruta;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.railway_management_system.tren.Tren;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -26,6 +26,10 @@ public class Program {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rutaId", nullable = false)
     private Ruta ruta;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "trenId", nullable = false)
+    private Tren tren;
 
     public Program() {
 
@@ -72,6 +76,14 @@ public class Program {
 
     public void setDataPlecare(Date dataPlecare) {
         this.dataPlecare = dataPlecare;
+    }
+
+    public Tren getTren() {
+        return tren;
+    }
+
+    public void setTren(Tren tren) {
+        this.tren = tren;
     }
 
     @Override

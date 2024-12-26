@@ -1,7 +1,13 @@
 package com.example.railway_management_system.ruta;
 
+import com.example.railway_management_system.config.JwtService;
 import com.example.railway_management_system.program.Program;
 import com.example.railway_management_system.program.ProgramRepository;
+import com.example.railway_management_system.tren.Tren;
+import com.example.railway_management_system.tren.TrenRepository;
+import com.example.railway_management_system.utilizator.Rol;
+import com.example.railway_management_system.utilizator.Utilizator;
+import com.example.railway_management_system.utilizator.UtilizatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +20,27 @@ public class RutaService {
 
      private final RutaRepository rutaRepository;
      private final ProgramRepository programRepository;
+     private final TrenRepository trenRepository;
+     private final JwtService jwtService;
+     private final UtilizatorRepository utilizatorRepository;
 
      @Autowired
      public RutaService(RutaRepository rutaRepository,
-                        ProgramRepository programRepository) {
+                        ProgramRepository programRepository,
+                        TrenRepository trenRepository,
+                        JwtService jwtService,
+                        UtilizatorRepository utilizatorRepository) {
          this.rutaRepository = rutaRepository;
          this.programRepository = programRepository;
+         this.trenRepository = trenRepository;
+         this.jwtService = jwtService;
+         this.utilizatorRepository = utilizatorRepository;
      }
 
-     public List<Ruta> getRute() {
+     public List<Ruta> getRute(String authHeader) {
+         if (!isAdmin(authHeader)) {
+             throw new IllegalStateException("nu aveti acces la aceasta ruta");
+         }
          return rutaRepository.findAll();
      }
 
@@ -36,7 +54,10 @@ public class RutaService {
          return programRepository.findProgrameForRuta(ruta.get().getRutaId());
      }
 
-     public void inregistrareRuta(Ruta ruta) {
+     public void inregistrareRuta(Ruta ruta, String authHeader) {
+         if (!isAdmin(authHeader)) {
+             throw new IllegalStateException("nu aveti acces la aceasta ruta");
+         }
          Optional<Ruta> rutaExistenta = rutaRepository
                  .findRutaByPlecareAndDestinatie(ruta.getStatiePlecare(),
                          ruta.getStatieDestinatie());
@@ -60,7 +81,10 @@ public class RutaService {
          rutaRepository.save(ruta);
      }
 
-     public void stergereRuta(Long rutaId) {
+     public void stergereRuta(Long rutaId, String authHeader) {
+         if (!isAdmin(authHeader)) {
+             throw new IllegalStateException("nu aveti acces la aceasta ruta");
+         }
          boolean exists = rutaRepository.existsById(rutaId);
          if (!exists) {
              throw new IllegalStateException("ruta cu id " + rutaId +
@@ -71,7 +95,10 @@ public class RutaService {
 
      public void modificareRuta(Long rutaId, String statiePlecare,
                                 String statieDestinatie, Integer distanta,
-                                Integer durata) {
+                                Integer durata, String authHeader) {
+         if (!isAdmin(authHeader)) {
+             throw new IllegalStateException("nu aveti acces la aceasta ruta");
+         }
          boolean exists = rutaRepository.existsById(rutaId);
          if (!exists) {
              throw new IllegalStateException("ruta cu id " + rutaId +
@@ -94,11 +121,19 @@ public class RutaService {
          rutaRepository.save(rutaToUpdate);
      }
 
-     public void inregistrareProgram(Long rutaId, Program program) {
+     public void inregistrareProgram(Long rutaId, Long trenId, Program program,
+                                     String authHeader) {
+         if (!isAdmin(authHeader)) {
+             throw new IllegalStateException("nu aveti acces la aceasta ruta");
+         }
          boolean exists = rutaRepository.existsById(rutaId);
          if (!exists) {
              throw new IllegalStateException("ruta cu id " + rutaId +
                      " nu existenta");
+         }
+         exists = trenRepository.existsById(trenId);
+         if (!exists) {
+             throw new IllegalStateException("trenul cu id " + trenId + " nu exista");
          }
          if (program.getDataPlecare() == null) {
              throw new IllegalStateException("nu este specificata data plecarii");
@@ -108,8 +143,28 @@ public class RutaService {
          }
 
          Ruta ruta = rutaRepository.getReferenceById(rutaId);
+         Tren tren = trenRepository.getReferenceById(trenId);
 
          program.setRuta(ruta);
+         program.setTren(tren);
          programRepository.save(program);
      }
+
+    private boolean isAdmin(String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalStateException("no authorization");
+        }
+
+        String token = authHeader.substring(7);
+        String emailExtras = jwtService.extractEmail(token);
+
+        Optional<Utilizator> utilizator = utilizatorRepository
+                .findUtilizatorByEmail(emailExtras);
+        if (utilizator.isEmpty()) {
+            throw new IllegalStateException("email-ul nu e inregistrat");
+        }
+
+        return utilizator.get().getRol() == Rol.ADMIN;
+    }
 }

@@ -23,6 +23,7 @@ public class Bilet {
     private Integer loc;
     private Integer vagon;
     private Integer pret;
+    private Integer clasa;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "utilizatorId", nullable = false)
@@ -100,6 +101,14 @@ public class Bilet {
 
     public void setProgram(Program program) {
         this.program = program;
+    }
+
+    public Integer getClasa() {
+        return clasa;
+    }
+
+    public void setClasa(Integer clasa) {
+        this.clasa = clasa;
     }
 
     @Override
