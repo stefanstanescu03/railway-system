@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,6 +24,12 @@ public class UtilizatorController {
     public Utilizator getUtilizator(@PathVariable("utilizatorId") Long utilizatorId,
                                     @RequestHeader("Authorization") String authHeader) {
         return utilizatorService.getUtilizator(utilizatorId, authHeader);
+    }
+
+    @GetMapping(path = "email={email}")
+    public Utilizator getUtilizatorByEmail(@PathVariable("email") String email,
+                                           @RequestHeader("Authorization") String authHeader) {
+        return utilizatorService.getUtilizatorByEmail(email, authHeader);
     }
 
     @DeleteMapping(path = "id={utilizatorId}")

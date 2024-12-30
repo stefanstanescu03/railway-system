@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Mers Tren</h1>
+    <form action="/" method="post">
+        <label for="statiePlecare">Statie de plecare</label>
+        <input type="text" id="statiePlecare" name="statiePlecare"> <br>
+
+        <label for="statieDestinatie">Statie destinatie</label>
+        <input type="text" id="statieDestinatie" name="statieDestinatie"> <br>
+
+        <button type="submit">Cauta</button>
+    </form>
+    <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+    <p th:if="${statii}">Traseu recomandat:</p>
+
+    <div th:if="${statii}">
+        <p th:each="statie: ${statii}" th:text="${statie}"></p>
+    </div>
+
+    <table th:if="${programe}">
+        <thead>
+            <tr>
+                <th scope="col">Tren</th>
+                <th scope="col">Plecare</th>
+                <th scope="col">Sosire</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="program: ${programe}">
+                <td th:text="${program.tren.denumire}"></td>
+                <td th:text="${program.dataPlecare}"></td>
+                <td th:text="${program.dataAjungere}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

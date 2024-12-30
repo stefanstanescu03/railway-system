@@ -32,6 +32,19 @@ public class RutaController {
         rutaService.inregistrareRuta(ruta, authHeader);
     }
 
+    @PutMapping(path = "id={rutaId}&plecare={statiePlecare}" +
+            "&destinatie={statieDestinatie}&distanta={distanta}" +
+            "&durata={durata}")
+    public void modificareRuta(@PathVariable("rutaId") Long rutaId,
+                               @PathVariable("statiePlecare") String statiePlecare,
+                               @PathVariable("statieDestinatie") String statieDestinatie,
+                               @PathVariable("distanta") Integer distanta,
+                               @PathVariable("durata") Integer durata,
+                               @RequestHeader("Authorization") String authHeader) {
+        rutaService.modificareRuta(rutaId, statiePlecare, statieDestinatie,
+                distanta, durata, authHeader);
+    }
+
     @DeleteMapping(path = "id={rutaId}")
     public void stergereRuta(@PathVariable("rutaId") Long rutaId,
                              @RequestHeader("Authorization") String authHeader) {
@@ -49,8 +62,15 @@ public class RutaController {
     @GetMapping(path = "cautare/plecare={statiePlecare}&" +
             "destinatie={statieDestinatie}")
     public List<Program> getPrograme(@PathVariable("statiePlecare") String statiePlecare,
-                            @PathVariable("statieDestinatie") String statieDestinatie) {
+                                     @PathVariable("statieDestinatie") String statieDestinatie) {
         return rutaService.getPrograme(statiePlecare, statieDestinatie);
+    }
+
+    @GetMapping(path = "cautare/statii/plecare={statiePlecare}&" +
+            "destinatie={statieDestinatie}")
+    public List<String> getStatii(@PathVariable("statiePlecare") String statiePlecare,
+                          @PathVariable("statieDestinatie") String statieDestinatie) {
+        return rutaService.getStatii(statiePlecare, statieDestinatie);
     }
 
     @ExceptionHandler(IllegalStateException.class)

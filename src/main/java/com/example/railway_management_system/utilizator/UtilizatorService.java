@@ -62,6 +62,25 @@ public class UtilizatorService {
 
     }
 
+    public Utilizator getUtilizatorByEmail(String email, String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalStateException("not authorization");
+        }
+
+        String token = authHeader.substring(7);
+        String emailExtras = jwtService.extractEmail(token);
+
+        if (!Objects.equals(email, emailExtras)) {
+            throw new IllegalStateException("nu aveti acces sa vizualizati acest cont");
+        }
+
+        return utilizatorRepository.findUtilizatorByEmail(email).orElseThrow(() ->
+                new IllegalStateException("utilizatorul cu email " +
+                        email + " nu exista")
+        );
+    }
+
     public void stergereUtilizator(Long utilizatorId, String authHeader) {
         boolean exists = utilizatorRepository.existsById(utilizatorId);
         if (!exists) {
@@ -100,7 +119,7 @@ public class UtilizatorService {
         }
 
         Optional<Utilizator> utilizatorExistent = utilizatorRepository.findUtilizatorByEmail(email);
-        if (utilizatorExistent.isPresent()) {
+        if (utilizatorExistent.isPresent() && !Objects.equals(email, emailExtras)) {
             throw new IllegalStateException("email deja inregistrat");
         }
 

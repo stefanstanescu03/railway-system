@@ -30,11 +30,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/ruta/cautare/**").permitAll()
-//                        .requestMatchers("/api/tren/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/program/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/ruta").hasRole("ADMIN")
-//                        .requestMatchers("/api/ruta/program/**").hasRole("ADMIN")
-//                        .requestMatchers("/api/ruta/id**").hasRole("ADMIN")
+                        .requestMatchers("/login/**").permitAll()
+                        .requestMatchers("/signup/**").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/cont/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

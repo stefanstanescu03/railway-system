@@ -11,9 +11,7 @@ import com.example.railway_management_system.utilizator.UtilizatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RutaService {
@@ -52,6 +50,31 @@ public class RutaService {
              throw new IllegalStateException("ruta nu este existenta");
          }
          return programRepository.findProgrameForRuta(ruta.get().getRutaId());
+     }
+
+     public List<String> getStatii(String statiePlecare, String statieDestinatie) {
+         List<Ruta> rute = rutaRepository.findAll();
+         Set<String> statiiSet = new HashSet<>();
+
+         for (Ruta ruta : rute) {
+             statiiSet.add(ruta.getStatiePlecare());
+             statiiSet.add(ruta.getStatieDestinatie());
+         }
+         List<String> statii = new ArrayList<String>(statiiSet);
+
+         Graph graph = new Graph(statii.size());
+         for (Ruta ruta : rute) {
+             graph.addEdge(statii.indexOf(ruta.getStatiePlecare()),
+                     statii.indexOf(ruta.getStatieDestinatie()), ruta.getDurata());
+         }
+         List<Integer> shortest = graph.shortestPath(statii.indexOf(statiePlecare),
+                 statii.indexOf(statieDestinatie));
+
+         List<String> statiiFinal = new ArrayList<String>();
+         for (Integer i : shortest) {
+             statiiFinal.add(statii.get(i));
+         }
+         return statiiFinal.reversed();
      }
 
      public void inregistrareRuta(Ruta ruta, String authHeader) {

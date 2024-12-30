@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cont</title>
+</head>
+<body>
+    <h1>Detalii cont</h1>
+    <form action="cont" method="post">
+        <label for="nume">Nume</label>
+        <input type="text" name="nume" id="nume" th:value="${cont.nume}"> <br>
+
+        <label for="prenume">prenume</label>
+        <input type="text" name="prenume" id="prenume" th:value="${cont.prenume}"> <br>
+
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" th:value="${cont.email}"> <br>
+
+        <label for="telefon">Telefon</label>
+        <input type="text" name="telefon" id="telefon" th:value="${cont.telefon}"> <br>
+
+<!--        <label for="parola">Parola</label>-->
+<!--        <input type="password" name="parola" id="parola"> <br>-->
+
+        <button type="submit">Modifica</button>
+    </form>
+    <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+</body>
+</html>

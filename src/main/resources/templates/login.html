@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form action="login" method="post">
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email"> <br>
+        <label for="parola">Parola</label>
+        <input type="password" name="parola" id="parola"> <br>
+        <button type="submit">Login</button>
+    </form>
+    <p>Daca nu aveti cont puteti sa <a href="/signup">creati</a> unul</p>
+    <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+</body>
+</html>
