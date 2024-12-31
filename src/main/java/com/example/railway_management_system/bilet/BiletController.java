@@ -20,6 +20,13 @@ public class BiletController {
             this.biletService = biletService;
     }
 
+    @GetMapping(path = "id={biletId}&utilizator={utilizatorId}")
+    public Bilet getBilet(@PathVariable("biletId") Long biletId,
+                          @PathVariable("utilizatorId") Long utilizatorId,
+                          @RequestHeader("Authorization") String authHeader) {
+        return biletService.getBilet(biletId, utilizatorId, authHeader);
+    }
+
     @GetMapping(path = "cauta/id={utilizatorId}")
     public List<Bilet> getBilete(@PathVariable("utilizatorId") Long utilizatorId,
                                  @RequestHeader("Authorization") String authHeader) {
@@ -39,7 +46,7 @@ public class BiletController {
                                 @PathVariable("loc") Integer loc,
                                 @PathVariable("vagon") Integer vagon,
                                 @PathVariable("clasa") Integer clasa,
-                                @PathVariable("pret") Integer pret,
+                                @PathVariable("pret") Double pret,
                                 @PathVariable("utilizatorId") Long utilizatorId,
                                 @RequestHeader("Authorization") String authHeader) {
         biletService.modificareBilet(biletId, loc, vagon, clasa,

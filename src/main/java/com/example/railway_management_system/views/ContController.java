@@ -1,11 +1,13 @@
 package com.example.railway_management_system.views;
 
+import com.example.railway_management_system.bilet.Bilet;
 import com.example.railway_management_system.config.JwtService;
 import com.example.railway_management_system.utilizator.Utilizator;
 import com.google.gson.Gson;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -90,8 +93,6 @@ public class ContController {
     private void getDetails(String token, Model model) {
         String email = jwtService.extractEmail(token);
         String url = String.format("http://localhost:8080/api/utilizator/email=%s", email);
-        System.out.println(url);
-
         try {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
@@ -109,9 +110,40 @@ public class ContController {
                 model.addAttribute("cont", cont);
                 assert cont != null;
                 this.id = cont.getUtilizatorId();
+                getBilete(token, model);
+
             }
         } catch (HttpClientErrorException _) {
 
+        }
+    }
+
+    private void getBilete(String token, Model model) {
+        String url = String.format("http://localhost:8080/api/bilet/cauta/id=%s", id.toString());
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+
+            headers.set("Authorization", "Bearer " + token);
+            headers.set("Content-Type", "application/json");
+
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<List<Bilet>> apiResponse = restTemplate.exchange(
+                    url,
+                    org.springframework.http.HttpMethod.GET,
+                    entity,
+                    new ParameterizedTypeReference<List<Bilet>>() {
+                    });
+            if (apiResponse.getStatusCode() == HttpStatus.OK) {
+                List<Bilet> bilete = apiResponse.getBody();
+                System.out.println(bilete);
+                model.addAttribute("bilete", bilete);
+            }
+
+
+        } catch (HttpClientErrorException e) {
+            System.out.println(e.getMessage());
         }
     }
 

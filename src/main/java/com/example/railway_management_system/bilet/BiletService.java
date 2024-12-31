@@ -26,6 +26,31 @@ public class BiletService {
         this.utilizatorRepository = utilizatorRepository;
     }
 
+    public Bilet getBilet(Long biletId, Long utilizatorId, String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalStateException("no authorization");
+        }
+
+        boolean exists = biletRepository.existsById(biletId);
+        if (!exists) {
+            throw new IllegalStateException("biletul cu id " + biletId + " nu exista");
+        }
+
+        String token = authHeader.substring(7);
+        String emailExtras = jwtService.extractEmail(token);
+
+        Utilizator utilizator = utilizatorRepository.getReferenceById(utilizatorId);
+        if (!Objects.equals(emailExtras, utilizator.getEmail())) {
+            throw new IllegalStateException("nu aveti acces sa vizualizati acest bilet");
+        }
+
+        return biletRepository.findById(biletId).orElseThrow(() ->
+                new IllegalStateException("biletul cu id " +
+                        biletId + " nu exista")
+        );
+
+    }
+
     public List<Bilet> getBilete(Long utilizatorId, String authHeader) {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -65,14 +90,14 @@ public class BiletService {
 
         Utilizator utilizator = utilizatorRepository.getReferenceById(utilizatorId);
         if (!Objects.equals(emailExtras, utilizator.getEmail())) {
-            throw new IllegalStateException("nu aveti acces sa vizualizati acest cont");
+            throw new IllegalStateException("nu aveti acces sa stergeti acest bilet");
         }
 
         biletRepository.deleteById(biletId);
     }
 
     public void modificareBilet(Long biletId, Integer loc, Integer vagon,
-                                Integer clasa, Integer pret, Long utilizatorId, String authHeader) {
+                                Integer clasa, Double pret, Long utilizatorId, String authHeader) {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new IllegalStateException("no authorization");
@@ -89,7 +114,7 @@ public class BiletService {
 
         Utilizator utilizator = utilizatorRepository.getReferenceById(utilizatorId);
         if (!Objects.equals(emailExtras, utilizator.getEmail())) {
-            throw new IllegalStateException("nu aveti acces sa vizualizati acest cont");
+            throw new IllegalStateException("nu aveti acces sa modificati acest bilet");
         }
 
         Bilet bilet = biletRepository.getReferenceById(biletId);

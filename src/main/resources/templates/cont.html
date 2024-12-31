@@ -25,5 +25,36 @@
         <button type="submit">Modifica</button>
     </form>
     <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+
+    <table th:if="${!bilete.isEmpty()}">
+        <thead>
+            <tr>
+                <th scope="col">Tren</th>
+                <th scope="col">Data plecarii</th>
+                <th scope="col">Data sosirii</th>
+                <th scope="col">Plecare</th>
+                <th scope="col">Destinatie</th>
+                <th scope="col">Loc</th>
+                <th scope="col">Vagon</th>
+                <th scope="col">Clasa</th>
+                <th scope="col">Pret</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="bilet: ${bilete}">
+                <td th:text="${bilet.program.tren.denumire}"></td>
+                <td th:text="${bilet.program.dataPlecare}"></td>
+                <td th:text="${bilet.program.dataAjungere}"></td>
+                <td th:text="${bilet.program.ruta.statiePlecare}"></td>
+                <td th:text="${bilet.program.ruta.statieDestinatie}"></td>
+                <td th:text="${bilet.loc}"></td>
+                <td th:text="${bilet.vagon}"></td>
+                <td th:text="${bilet.clasa}"></td>
+                <td th:text="${bilet.pret}"></td>
+                <td><a th:href="@{http://localhost:8080/modificare/bilet={id}(id=${bilet.biletId})}">modifica</a></td>
+            </tr>
+        </tbody>
+    </table>
+
 </body>
 </html>

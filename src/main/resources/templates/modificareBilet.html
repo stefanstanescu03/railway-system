@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script>
+    function updateText(distanta) {
+      var selectedOption = document.getElementById("clasa").value;
+      if (selectedOption === "2") {
+        document.getElementById("pretEcran").innerText = "Pret: " + (distanta * 0.25) + " RON";
+        document.getElementById('pret').value = distanta * 0.25;
+      } else {
+        document.getElementById("pretEcran").innerText = "Pret: " + (distanta * 0.5) + " RON";
+        document.getElementById('pret').value = distanta * 0.5;
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Modificare bilet</h1>
+  <div>
+    <p>Data plecare: <span th:text="${bilet.program.dataPlecare}"></span></p>
+    <p>Data sosire: <span th:text="${bilet.program.dataAjungere}"></span></p>
+    <p>Statie plecare: <span th:text="${bilet.program.ruta.statiePlecare}"></span></p>
+    <p>Statie sosire: <span th:text="${bilet.program.ruta.statieDestinatie}"></span></p>
+    <p>Tren: <span th:text="${bilet.program.tren.denumire}"></span></p>
+  </div>
+  <form th:action="@{bilet={id}(id=${bilet.biletId})}" method="post">
+    <label for="loc">Loc (<span th:text="${bilet.program.tren.capacitate}"></span> disponibile)</label>
+    <input type="text" id="loc" name="loc" th:value="${bilet.loc}"> <br>
+
+    <label for="vagon">Vagon (<span th:text="${bilet.program.tren.numarVagoane}"></span> disponibile)</label>
+    <input type="text" id="vagon" name="vagon" th:value="${bilet.vagon}"> <br>
+
+    <label for="clasa">Clasa</label>
+    <select name="clasa" id="clasa" th:onchange="@{updateText({distanta})(distanta=${bilet.program.ruta.distanta})}">
+      <option value="1">1</option>
+      <option value="2">2</option>
+    </select>
+
+    <p id="pretEcran">Pret: </p>
+    <input type="hidden" id="pret" name="pret" th:value="${bilet.pret}">
+    <button type="submit">Modifica</button>
+  </form>
+
+  <form action="/modificare/stergere" method="post">
+    <input type="hidden" id="id" name="id" th:value="${bilet.biletId}">
+    <button type="submit">Sterge</button>
+  </form>
+
+  <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+</body>
+</html>

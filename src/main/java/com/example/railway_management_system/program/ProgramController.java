@@ -25,6 +25,11 @@ public class ProgramController {
         return programService.getPrograme(authHeader);
     }
 
+    @GetMapping(path = "id={programId}")
+    public Program getProgram(@PathVariable("programId") Long programId) {
+        return programService.getProgram(programId);
+    }
+
     @PutMapping(path = "id={programId}&dataPlecare={dataPlecare}" +
             "&dataAjungere={dataAjungere}&trenId={trenId}")
     public void modificareProgram(@PathVariable("programId") Long programId,

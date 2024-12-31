@@ -22,7 +22,7 @@ public class Bilet {
 
     private Integer loc;
     private Integer vagon;
-    private Integer pret;
+    private Double pret;
     private Integer clasa;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -38,21 +38,21 @@ public class Bilet {
 
     }
 
-    public Bilet(Long biletId, Integer loc, Integer vagon, Integer pret,
-                 Utilizator utilizator) {
+    public Bilet(Long biletId, Integer loc, Integer vagon, Double pret,
+                 Integer clasa) {
         this.biletId = biletId;
         this.loc = loc;
         this.vagon = vagon;
         this.pret = pret;
-        this.utilizator = utilizator;
+        this.clasa = clasa;
     }
 
-    public Bilet(Integer loc, Integer vagon, Integer pret,
-                 Utilizator utilizator) {
+    public Bilet(Integer loc, Integer vagon, Double pret,
+                 Integer clasa) {
         this.loc = loc;
         this.vagon = vagon;
         this.pret = pret;
-        this.utilizator = utilizator;
+        this.clasa = clasa;
     }
 
     public Long getBiletId() {
@@ -71,11 +71,11 @@ public class Bilet {
         this.utilizator = utilizator;
     }
 
-    public Integer getPret() {
+    public Double getPret() {
         return pret;
     }
 
-    public void setPret(Integer pret) {
+    public void setPret(Double pret) {
         this.pret = pret;
     }
 

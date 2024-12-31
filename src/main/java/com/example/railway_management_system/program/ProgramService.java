@@ -41,6 +41,13 @@ public class ProgramService {
         return programRepository.findAll();
     }
 
+    public Program getProgram(Long programId) {
+        return programRepository.findById(programId).orElseThrow(() ->
+                new IllegalStateException("programul cu id " +
+                        programId + " nu exista")
+        );
+    }
+
     public void stergereProgram(Long programId, String authHeader) {
         if (!isAdmin(authHeader)) {
             throw new IllegalStateException("nu aveti acces la aceasta ruta");

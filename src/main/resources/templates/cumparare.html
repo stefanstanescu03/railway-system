@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cumparare</title>
+    <script>
+      function updateText(distanta) {
+        var selectedOption = document.getElementById("clasa").value;
+        if (selectedOption === "2") {
+          document.getElementById("pretEcran").innerText = "Pret: " + (distanta * 0.25) + " RON";
+          document.getElementById('pret').value = distanta * 0.25;
+        } else {
+          document.getElementById("pretEcran").innerText = "Pret: " + (distanta * 0.5) + " RON";
+          document.getElementById('pret').value = distanta * 0.5;
+        }
+      }
+    </script>
+</head>
+
+<body>
+  <h1>Cumparare bilet</h1>
+
+  <div>
+    <p>Data plecare: <span th:text="${program.dataPlecare}"></span></p>
+    <p>Data sosire: <span th:text="${program.dataAjungere}"></span></p>
+    <p>Statie plecare: <span th:text="${program.ruta.statiePlecare}"></span></p>
+    <p>Statie sosire: <span th:text="${program.ruta.statieDestinatie}"></span></p>
+    <p>Tren: <span th:text="${program.tren.denumire}"></span></p>
+  </div>
+
+  <form th:action="@{program={id}(id=${program.programId})}" method="post">
+    <label for="loc">Loc (<span th:text="${program.tren.capacitate}"></span> disponibile)</label>
+    <input type="text" id="loc" name="loc"> <br>
+
+    <label for="vagon">Vagon (<span th:text="${program.tren.numarVagoane}"></span> disponibile)</label>
+    <input type="text" id="vagon" name="vagon"> <br>
+
+    <label for="clasa">Clasa</label>
+    <select name="clasa" id="clasa" th:onchange="@{updateText({distanta})(distanta=${program.ruta.distanta})}">
+      <option value="1">1</option>
+      <option value="2">2</option>
+    </select>
+
+    <p id="pretEcran">Pret: </p>
+    <input type="hidden" id="pret" name="pret">
+    <button type="submit">Cumpara</button>
+  </form>
+  <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+
+</body>
+</html>

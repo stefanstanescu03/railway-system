@@ -35,6 +35,7 @@
                 <td th:text="${program.tren.denumire}"></td>
                 <td th:text="${program.dataPlecare}"></td>
                 <td th:text="${program.dataAjungere}"></td>
+                <td><a th:href="@{http://localhost:8080/cumparare/program={id}(id=${program.programId})}">cumpara</a></td>
             </tr>
         </tbody>
     </table>

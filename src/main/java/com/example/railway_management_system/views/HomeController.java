@@ -74,7 +74,11 @@ public class HomeController {
 
             }
         }
-
         return "home";
+    }
+
+    @GetMapping(path = "cumpara")
+    public void handlePurchase() {
+        System.out.println("A mers!");
     }
 }
