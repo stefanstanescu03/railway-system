@@ -32,6 +32,12 @@ public class TrenController {
         return trenService.getTren(trenId, authHeader);
     }
 
+    @GetMapping(path = "denumire={denumire}")
+    public Tren getTrenDenumire(@PathVariable("denumire") String denumire,
+                                @RequestHeader("Authorization") String authHeader) {
+        return this.trenService.getTrenDenumire(denumire, authHeader);
+    }
+
     @PostMapping
     public void inregistrareTren(@RequestBody Tren tren,
                                  @RequestHeader("Authorization") String authHeader) {

@@ -46,6 +46,7 @@ public class SignupController {
                 tokenCookie.setSecure(true);
                 tokenCookie.setPath("/");
                 response.addCookie(tokenCookie);
+                return "redirect:/";
             }
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {

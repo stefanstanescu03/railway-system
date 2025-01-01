@@ -5,6 +5,7 @@ import com.example.railway_management_system.config.JwtService;
 import com.example.railway_management_system.utilizator.Utilizator;
 import com.google.gson.Gson;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -35,10 +36,11 @@ public class ContController {
 
     @GetMapping(path = "cont")
     public String cont(@CookieValue("authToken") String token,
-                       Model model) {
+                       Model model,
+                       HttpServletRequest request) {
 
         getDetails(token, model);
-
+        model.addAttribute("isLogged", isLogged(request));
         return "cont";
     }
 
@@ -49,7 +51,8 @@ public class ContController {
                                       @RequestParam("email") String email,
                                       @RequestParam("telefon") String telefon,
                                       Model model,
-                                      HttpServletResponse response) {
+                                      HttpServletResponse response,
+                                      HttpServletRequest request) {
 
         String base = "http://localhost:8080/api/utilizator/";
         String url = String.format(base + "id=%s&nume=%s" +
@@ -86,7 +89,7 @@ public class ContController {
         }
 
         getDetails(token, model);
-
+        model.addAttribute("isLogged", isLogged(request));
         return "cont";
     }
 
@@ -145,6 +148,18 @@ public class ContController {
         } catch (HttpClientErrorException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private boolean isLogged(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("authToken".equals(cookie.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

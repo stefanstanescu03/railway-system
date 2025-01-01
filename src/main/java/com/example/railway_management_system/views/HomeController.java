@@ -1,6 +1,9 @@
 package com.example.railway_management_system.views;
 
 import com.example.railway_management_system.program.Program;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +21,16 @@ import java.util.List;
 public class HomeController {
 
     @GetMapping(path = "/")
-    public String home() {
+    public String home(Model model,
+                       HttpServletRequest request) {
+        model.addAttribute("isLogged", isLogged(request));
         return "home";
     }
 
     @PostMapping(path = "/")
     public String handleCautare(@RequestParam("statiePlecare") String statiePlecare,
                                 @RequestParam("statieDestinatie") String statieDestinatie,
+                                HttpServletRequest request,
                                 Model model) {
 
         try {
@@ -74,11 +80,29 @@ public class HomeController {
 
             }
         }
+
+        model.addAttribute("isLogged", isLogged(request));
         return "home";
     }
 
-    @GetMapping(path = "cumpara")
-    public void handlePurchase() {
-        System.out.println("A mers!");
+    @GetMapping(path = "/cont/logout")
+    public String handleLogout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("authToken", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return "redirect:/login";
+    }
+
+    private boolean isLogged(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("authToken".equals(cookie.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

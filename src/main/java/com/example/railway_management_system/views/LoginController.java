@@ -42,6 +42,7 @@ public class LoginController {
                 tokenCookie.setSecure(true);
                 tokenCookie.setPath("/");
                 response.addCookie(tokenCookie);
+                return "redirect:/";
             }
 
         } catch (HttpClientErrorException e) {

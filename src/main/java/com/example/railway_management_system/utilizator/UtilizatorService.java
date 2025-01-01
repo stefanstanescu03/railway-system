@@ -62,6 +62,15 @@ public class UtilizatorService {
 
     }
 
+    public Long getId(String email) {
+        Optional<Utilizator> utilizator = utilizatorRepository
+                .findUtilizatorByEmail(email);
+        if(utilizator.isEmpty()) {
+            throw new IllegalStateException("utilizator inexistent");
+        }
+        return utilizator.get().getUtilizatorId();
+    }
+
     public Utilizator getUtilizatorByEmail(String email, String authHeader) {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

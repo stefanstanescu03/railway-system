@@ -26,6 +26,11 @@ public class UtilizatorController {
         return utilizatorService.getUtilizator(utilizatorId, authHeader);
     }
 
+    @GetMapping(path = "getId/email={email}")
+    public Long getId(@PathVariable("email") String email) {
+        return utilizatorService.getId(email);
+    }
+
     @GetMapping(path = "email={email}")
     public Utilizator getUtilizatorByEmail(@PathVariable("email") String email,
                                            @RequestHeader("Authorization") String authHeader) {

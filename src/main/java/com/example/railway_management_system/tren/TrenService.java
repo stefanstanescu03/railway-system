@@ -48,6 +48,18 @@ public class TrenService {
                         trenId + " nu exista"));
     }
 
+    public Tren getTrenDenumire(String denumire, String authHeader) {
+        if (!isAdmin(authHeader)) {
+            throw new IllegalStateException("nu aveti acces la aceasta ruta");
+        }
+        Optional<Tren> tren = trenRepository.findTrenByDenumire(denumire);
+        if (tren.isEmpty()) {
+            throw new IllegalStateException("Trenul cu denumirea "
+                    + denumire + " nu exista");
+        }
+        return tren.get();
+    }
+
     public void inregistrareTren(Tren tren, String authHeader) {
         if (!isAdmin(authHeader)) {
             throw new IllegalStateException("nu aveti acces la aceasta ruta");

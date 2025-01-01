@@ -4,6 +4,8 @@ import com.example.railway_management_system.bilet.Bilet;
 import com.example.railway_management_system.config.JwtService;
 import com.example.railway_management_system.utilizator.Utilizator;
 import com.google.gson.Gson;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -27,10 +29,11 @@ public class ModificareBiletController {
     @GetMapping (path = "modificare/bilet={biletId}")
     public String modificareBilet(@CookieValue("authToken") String token,
                                   @PathVariable("biletId") String biletId,
-                                  Model model) {
+                                  Model model,
+                                  HttpServletRequest request) {
 
         getDetails(token, biletId, model);
-
+        model.addAttribute("isLogged", isLogged(request));
         return "modificareBilet";
     }
 
@@ -41,12 +44,14 @@ public class ModificareBiletController {
                                @RequestParam("vagon") String vagon,
                                @RequestParam("clasa") String clasa,
                                @RequestParam("pret") String pret,
+                               HttpServletRequest request,
                                Model model) {
 
         if (isNotNumeric(vagon)) {
             model.addAttribute("error", "vagonul trebuie sa fie " +
                     "un numar");
             getDetails(token, biletId, model);
+            model.addAttribute("isLogged", isLogged(request));
             return "modificareBilet";
         }
 
@@ -54,6 +59,7 @@ public class ModificareBiletController {
             model.addAttribute("error", "locul trebuie sa fie " +
                     "un numar");
             getDetails(token, biletId, model);
+            model.addAttribute("isLogged", isLogged(request));
             return "modificareBilet";
         }
 
@@ -61,6 +67,7 @@ public class ModificareBiletController {
             model.addAttribute("error", "pretul trebuie sa fie " +
                     "un numar");
             getDetails(token, biletId, model);
+            model.addAttribute("isLogged", isLogged(request));
             return "modificareBilet";
         }
 
@@ -96,7 +103,7 @@ public class ModificareBiletController {
         }
 
         getDetails(token, biletId, model);
-
+        model.addAttribute("isLogged", isLogged(request));
         return "modificareBilet";
     }
 
@@ -202,6 +209,18 @@ public class ModificareBiletController {
         } catch(NumberFormatException e){
             return true;
         }
+    }
+
+    private boolean isLogged(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("authToken".equals(cookie.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

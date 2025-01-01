@@ -5,6 +5,8 @@ import com.example.railway_management_system.config.JwtService;
 import com.example.railway_management_system.program.Program;
 import com.example.railway_management_system.utilizator.Utilizator;
 import com.google.gson.Gson;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -26,12 +28,18 @@ public class CumparareBiletController {
     }
 
     @GetMapping(path = "cumparare/program={id}")
-    public String cumparare(@CookieValue("authToken") String token,
+    public String cumparare(@CookieValue(value = "authToken", required = false) String token,
                             @PathVariable("id") String programId,
-                            Model model) {
+                            Model model,
+                            HttpServletRequest request) {
 
         getDetails(token, programId, model);
 
+        if (!isLogged(request)) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("isLogged", isLogged(request));
         return "cumparare";
     }
 
@@ -42,12 +50,14 @@ public class CumparareBiletController {
                                  @RequestParam("vagon") String vagon,
                                  @RequestParam("clasa") String clasa,
                                  @RequestParam("pret") String pret,
-                                 Model model) {
+                                 Model model,
+                                 HttpServletRequest request) {
 
         if (isNotNumeric(vagon)) {
             model.addAttribute("error", "vagonul trebuie sa fie " +
                     "un numar");
             getDetails(token, programId, model);
+            model.addAttribute("isLogged", isLogged(request));
             return "cumparare";
         }
 
@@ -55,6 +65,7 @@ public class CumparareBiletController {
             model.addAttribute("error", "locul trebuie sa fie " +
                     "un numar");
             getDetails(token, programId, model);
+            model.addAttribute("isLogged", isLogged(request));
             return "cumparare";
         }
 
@@ -62,6 +73,7 @@ public class CumparareBiletController {
             model.addAttribute("error", "pretul trebuie sa fie " +
                     "un numar");
             getDetails(token, programId, model);
+            model.addAttribute("isLogged", isLogged(request));
             return "cumparare";
         }
 
@@ -101,7 +113,7 @@ public class CumparareBiletController {
         }
 
         getDetails(token, programId, model);
-
+        model.addAttribute("isLogged", isLogged(request));
         return "cumparare";
     }
 
@@ -163,5 +175,17 @@ public class CumparareBiletController {
         } catch(NumberFormatException e){
             return true;
         }
+    }
+
+    private boolean isLogged(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("authToken".equals(cookie.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
