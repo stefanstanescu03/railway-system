@@ -1,3 +1,8 @@
+/** Clasa pentru SecurityConfig
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.config;
 
 import org.springframework.context.annotation.Bean;

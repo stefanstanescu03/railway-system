@@ -1,13 +1,16 @@
+/** Clasa pentru ProgramService
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.program;
 
 import com.example.railway_management_system.config.JwtService;
 import com.example.railway_management_system.tren.Tren;
 import com.example.railway_management_system.tren.TrenRepository;
-import com.example.railway_management_system.tren.TrenService;
 import com.example.railway_management_system.utilizator.Rol;
 import com.example.railway_management_system.utilizator.Utilizator;
 import com.example.railway_management_system.utilizator.UtilizatorRepository;
-import com.example.railway_management_system.utilizator.UtilizatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

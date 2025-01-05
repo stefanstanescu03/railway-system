@@ -1,11 +1,11 @@
+/** Clasa pentru Ruta
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.ruta;
 
-import com.example.railway_management_system.program.Program;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Table

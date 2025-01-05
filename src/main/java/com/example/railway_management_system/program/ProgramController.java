@@ -1,3 +1,8 @@
+/** Clasa pentru ProgramController
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.program;
 
 import org.springframework.beans.factory.annotation.Autowired;

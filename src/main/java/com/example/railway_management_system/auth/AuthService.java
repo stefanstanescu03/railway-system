@@ -1,3 +1,8 @@
+/** Clasa pentru AuthService
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.auth;
 
 import com.example.railway_management_system.config.JwtService;
@@ -10,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -39,19 +45,19 @@ public class AuthService {
             throw new IllegalStateException("email deja inregistrat");
         }
 
-        if (request.getNume() == null) {
+        if (request.getNume() == null || Objects.equals(request.getNume(), "")) {
             throw new IllegalStateException("campul nume nu este completat");
         }
-        if (request.getPrenume() == null) {
+        if (request.getPrenume() == null || Objects.equals(request.getPrenume(), "")) {
             throw new IllegalStateException("campul prenume nu este completat");
         }
-        if (request.getEmail() == null) {
+        if (request.getEmail() == null || Objects.equals(request.getEmail(), "")) {
             throw new IllegalStateException("campul email nu este completat");
         }
-        if (request.getTelefon() == null) {
+        if (request.getTelefon() == null || Objects.equals(request.getTelefon(), "")) {
             throw new IllegalStateException("campul telefon nu este completat");
         }
-        if (request.getParola() == null) {
+        if (request.getParola() == null || Objects.equals(request.getParola(), "")) {
             throw new IllegalStateException("campul parola nu este completat");
         }
         if (request.getRol() == null) {
@@ -93,7 +99,7 @@ public class AuthService {
         }
         int at = email.indexOf("@");
         if (at < 0) {
-            throw new IllegalStateException("formatul email-ului este gresit");
+            throw new IllegalStateException("formatul email-ului este gresit: nu contine @");
         }
         int dot = email.lastIndexOf(".");
         if (at >= dot) {

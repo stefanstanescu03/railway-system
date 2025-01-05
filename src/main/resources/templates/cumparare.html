@@ -48,7 +48,7 @@
   <form th:action="@{program={id}(id=${program.programId})}" method="post" class="bg-white p-4 rounded shadow">
     <div class="mb-3">
       <label for="loc" class="form-label">
-        Loc (<span th:text="${program.tren.capacitate}"></span> disponibile)
+        Loc (<span th:text="${program.tren.capacitate / 2}"></span> locuri per vagon)
       </label>
       <input type="text" id="loc" name="loc" class="form-control">
     </div>

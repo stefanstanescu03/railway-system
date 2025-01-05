@@ -1,3 +1,8 @@
+/** Clasa pentru BiletService
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.bilet;
 
 import com.example.railway_management_system.config.JwtService;
@@ -82,7 +87,7 @@ public class BiletService {
 
         boolean exists = biletRepository.existsById(biletId);
         if (!exists) {
-            throw new IllegalStateException("biletul uc id " + biletId + " nu exista");
+            throw new IllegalStateException("biletul cu id " + biletId + " nu exista");
         }
 
         String token = authHeader.substring(7);
@@ -105,7 +110,7 @@ public class BiletService {
 
         boolean exists = biletRepository.existsById(biletId);
         if (!exists) {
-            throw new IllegalStateException("biletul uc id " + biletId
+            throw new IllegalStateException("biletul cu id " + biletId
                     + " nu exista");
         }
 
@@ -121,14 +126,18 @@ public class BiletService {
         Tren tren = bilet.getProgram().getTren();
 
         if (loc != null) {
-            List<Integer> locuriTren = biletRepository.findLocuriByTren(tren.getTrenId());
-            System.out.println(locuriTren);
+            List<Bilet> bileteTren = biletRepository
+                    .findBileteByProgram(bilet.getProgram().getProgramId());
 
-            if (locuriTren.contains(loc)) {
-                throw new IllegalStateException("locul selectat este deja ocupat");
+            for (Bilet biletCurent : bileteTren) {
+                if (Objects.equals(biletCurent.getLoc(), loc) &&
+                        Objects.equals(biletCurent.getVagon(), vagon) &&
+                        Objects.equals(biletCurent.getClasa(), clasa)) {
+                    throw new IllegalStateException("locul selectat este deja ocupat");
+                }
             }
 
-            if (tren.getCapacitate() < loc) {
+            if (tren.getCapacitate() / 2 < loc) {
                 throw new IllegalStateException("locul selectat nu este disponibil");
             }
 

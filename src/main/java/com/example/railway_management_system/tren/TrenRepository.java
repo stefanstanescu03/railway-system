@@ -1,6 +1,10 @@
+/** Interfata pentru TrenRepository
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.tren;
 
-import com.example.railway_management_system.program.Program;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

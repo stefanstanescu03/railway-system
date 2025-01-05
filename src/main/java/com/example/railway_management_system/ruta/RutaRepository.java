@@ -1,3 +1,8 @@
+/** Interfata pentru RutaRepository
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.ruta;
 
 import org.springframework.data.jpa.repository.JpaRepository;

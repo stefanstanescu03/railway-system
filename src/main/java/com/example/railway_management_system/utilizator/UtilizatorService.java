@@ -1,3 +1,8 @@
+/** Clasa pentru UtilizatorService
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.utilizator;
 
 import com.example.railway_management_system.bilet.Bilet;
@@ -201,17 +206,21 @@ public class UtilizatorService {
                     "numarul de vagoane ale trenului");
         }
 
-        List<Integer> locuriTren = biletRepository.findLocuriByTren(tren.getTrenId());
+        List<Bilet> bileteTren = biletRepository.findBileteByProgram(programId);
 
-        if (locuriTren.size() == tren.getCapacitate()) {
+        if (bileteTren.size() == tren.getCapacitate()) {
             throw new IllegalStateException("trenul nu mai are locuri disponibile");
         }
 
-        if (locuriTren.contains(bilet.getLoc())) {
-            throw new IllegalStateException("locul selectat este deja ocupat");
+        for (Bilet biletCurent : bileteTren) {
+            if (Objects.equals(biletCurent.getLoc(), bilet.getLoc()) &&
+                    Objects.equals(biletCurent.getVagon(), bilet.getVagon()) &&
+                    Objects.equals(biletCurent.getClasa(), bilet.getClasa())) {
+                throw new IllegalStateException("locul selectat este deja ocupat");
+            }
         }
 
-        if (tren.getCapacitate() < bilet.getLoc()) {
+        if (tren.getCapacitate() / 2 < bilet.getLoc()) {
             throw new IllegalStateException("locul selectat nu este disponibil");
         }
 

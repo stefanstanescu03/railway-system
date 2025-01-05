@@ -1,3 +1,8 @@
+/** Interfata pentru ProgramRepository
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.program;
 
 import org.springframework.data.jpa.repository.JpaRepository;

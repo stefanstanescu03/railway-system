@@ -1,3 +1,8 @@
+/** Clasa pentru AuthRequest
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.auth;
 
 public class AuthRequest {

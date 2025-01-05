@@ -1,3 +1,8 @@
+/** Clasa pentru CumparareBiletController
+ * @author Stanescu Stefan
+ * @version 10 Decembrie 2024
+ */
+
 package com.example.railway_management_system.views;
 
 import com.example.railway_management_system.bilet.Bilet;
@@ -85,7 +90,6 @@ public class CumparareBiletController {
         assert id != null;
         String url = String.format("http://localhost:8080/api/utilizator/bilet/id=%s&program=%s",
                 id.toString(), programId);
-        System.out.println(url);
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -119,7 +123,6 @@ public class CumparareBiletController {
 
     private void getDetails(String token, String programId, Model model) {
         String url = String.format("http://localhost:8080/api/program/id=%s", programId);
-        System.out.println(url);
 
         try {
             RestTemplate restTemplate = new RestTemplate();
