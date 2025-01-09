@@ -16,8 +16,8 @@ public interface TrenRepository extends JpaRepository<Tren, Long> {
     Optional<Tren> findTrenByDenumire(String denumire);
 
     @Query(nativeQuery = true,
-            value = "SELECT Program.program_id FROM Program " +
-                    "INNER JOIN Tren ON Program.tren_id = Tren.tren_id " +
-                    "WHERE Tren.denumire = ?1")
+            value = "SELECT program.program_id FROM program " +
+                    "INNER JOIN tren ON program.tren_id = tren.tren_id " +
+                    "WHERE tren.denumire = ?1")
     List<Long> findProgrameByTren(String denumire);
 }
